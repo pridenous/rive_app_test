@@ -48,8 +48,29 @@ class _RocketContainerState extends State<RocketContainer> {
 
   void _loadRiveFile() async {
     final bytes = await rootBundle.load('assets/rocket.riv');
+    final file = RiveFile.import(bytes);
+
+    setState(() {
+      _artboard = file.mainArtboard;
+
+    });
   }
+
+  void _launch() {
+    _artboard.addController(_rocketController = SimpleAnimation('launch'));
+    setState(() => _rocketController.isActive = true);
+  }
+
+  void _fall() {
+    _artboard.addController(_rocketController = SimpleAnimation('fall'));
+    setState(() => _rocketController.isActive = true);
+  }
+
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      child: _artboard != null 
+        ? Rive(artboard: _artboard, fit: BoxFit.cover)
+        : Container(color: Colors.red),
+    );
   }
 }
